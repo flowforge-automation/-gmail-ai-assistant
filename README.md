@@ -13,6 +13,8 @@ An AI-powered agent that reads unread Gmail messages, classifies them, and draft
 
 See [`case-study.md`](./case-study.md) for the full write-up of the problem this solves and the results.
 
+Want to turn this into a self-improving, autonomous agent with its own persistent memory (isolated from any chat history)? See [`autonomous-agent/`](./autonomous-agent/) for a minimal working template (`CLAUDE.md` + `MEMORY.md` + `examples/`).
+
 ## Setup
 
 ### 1. Requirements
