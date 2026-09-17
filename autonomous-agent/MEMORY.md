@@ -59,7 +59,31 @@ Notes for the next run on this mailbox:
   "is:unread" is a small number.
 - Marking-as-read at scale (hundreds+) is not practical via one-by-one API
   calls — point the human at Gmail's own bulk UI ("select all N matching" +
-  mark as read) instead of trying to loop it yourself.
+  mark as read) instead of trying to loop it yourself. Same applies to
+  bulk-trash/delete — no batch API here either.
+- **Marketing-spam sender list + ready-to-use filter query** (added
+  2026-09-17, confirmed by the human's own bulk-delete): these senders are
+  pure marketing noise, safe to filter/trash — `eu.temuemail.com`,
+  `eu-shop.temuemail.com`, `selections.aliexpress.com`,
+  `promotion@aliexpress.com`, `mail.adobe.com`, `news.pulze.gr`,
+  `nespresso.com`, `m1.email.samsung.com`, `nedm.asus.com`, `vendora.gr`,
+  `coffeeisland.gr`, `marketing.ryanairemail.com`,
+  `newsletter@info.skroutz.gr`, `newsletter@news.ferryhopper.com`. Combined
+  Gmail search/filter query:
+  ```
+  from:(eu.temuemail.com OR eu-shop.temuemail.com OR selections.aliexpress.com OR promotion@aliexpress.com OR mail.adobe.com OR news.pulze.gr OR nespresso.com OR m1.email.samsung.com OR nedm.asus.com OR vendora.gr OR coffeeisland.gr OR marketing.ryanairemail.com OR newsletter@info.skroutz.gr OR newsletter@news.ferryhopper.com)
+  ```
+  The human set up a **permanent Gmail filter** with this query (Gmail →
+  search bar → ▼ dropdown → "Δημιουργία φίλτρου" → Archive/Delete + apply
+  to matching conversations) on 2026-09-17, so future mail from these
+  senders should skip the inbox automatically — don't expect to find much
+  here on future runs unless a new sender/subdomain shows up (in which
+  case: add it to this list and give the human an updated filter query,
+  same walkthrough).
+- ⚠️ `noreply@info.wise.com` was left OUT of the spam list above pending
+  review — categorized as "Ταξίδι" alongside Ryanair, but Wise is a money
+  service and may send real transaction notices from the same address.
+  Check before ever suggesting it for bulk delete/filter.
 
 ## Known tool limitations
 
@@ -159,4 +183,7 @@ Notes for the next run on this mailbox:
   only needed to trash 1 straggler thread that arrived after the human's
   cleanup. Lesson: when a human says "yes, do the bounded part" after a
   two-part plan (bulk-UI + agent), re-check current state first — they may
-  have already done their half before replying.
+  have already done their half before replying. Session wrapped up with a
+  step-by-step Gmail-filter walkthrough (search → ▼ → Δημιουργία φίλτρου →
+  Archive/Delete) so the same sender list is blocked automatically going
+  forward — human confirmed they set it up.
