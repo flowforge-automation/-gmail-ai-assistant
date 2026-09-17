@@ -152,5 +152,11 @@ Notes for the next run on this mailbox:
   reconstruction attempts confirmed NOT working by the human. Also
   discussed a marketing-spam cleanup (Temu/AliExpress/Adobe/etc. — no
   bulk-delete tool available, same limitation as mark-as-read; proposed
-  bounded-window agent cleanup + human-driven Gmail filter for the rest),
-  not yet executed.
+  bounded-window agent cleanup + human-driven Gmail filter for the rest).
+  Human did the bulk historical delete themselves via Gmail's own UI before
+  the agent's bounded pass even started — by the time the agent searched,
+  nearly everything matching the sender list was already in Trash. Agent
+  only needed to trash 1 straggler thread that arrived after the human's
+  cleanup. Lesson: when a human says "yes, do the bounded part" after a
+  two-part plan (bulk-UI + agent), re-check current state first — they may
+  have already done their half before replying.
