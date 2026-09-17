@@ -61,6 +61,36 @@ Notes for the next run on this mailbox:
   calls — point the human at Gmail's own bulk UI ("select all N matching" +
   mark as read) instead of trying to loop it yourself.
 
+## Known tool limitations
+
+- **Gmail message-reading tool corrupts `=` inside URLs found in email
+  bodies/HTML.** Any literal `=` immediately followed by two characters
+  that look like hex digits (e.g. `=af`, `=75`, `=17`) gets eaten or
+  replaced with a stray character (a replacement char, a control char, or
+  an unrelated letter) — looks like a quoted-printable mis-decode
+  somewhere in the extraction pipeline. Confirmed 2026-09-17 while pulling
+  unsubscribe links out of newsletter emails for `kyratzis7@gmail.com`:
+  - **Safe as-is** (no vulnerable `key=value` pattern in the link itself):
+    path/token-style tracking links — Skroutz (`linksg.skroutz.gr`),
+    Ferryhopper (`clicks.ferryhopper.com`), Zapier (`links.zapier.com`).
+    These worked first try.
+  - **Recoverable**: links wrapped in an outer redirect whose real
+    destination is itself percent-encoded (e.g. Pinterest's
+    `pinterest.com/email/click/?...&target=<percent-encoded real URL>`) —
+    decoding the `target=` param gives a clean, uncorrupted link even
+    though the corrupted outer params are unusable. **Confirmed working**
+    by the human (2026-09-17).
+  - **NOT reliably recoverable**: direct `key=value` unsubscribe links with
+    no redirect wrapper — Quora (`quora.com/email_optout/...`) and OpenAI
+    (`r.openai.com/asm/unsubscribe/...`). Best-effort reconstruction (just
+    re-inserting the missing `=`) was tried and **confirmed NOT working**
+    by the human (2026-09-17) — the corruption likely drops/alters more
+    than just the `=` sign, so don't waste time reconstructing these two
+    again. For Quora/OpenAI (and presumably any other direct-query-string
+    unsubscribe link), skip the email link entirely and point the human
+    straight at in-app/account settings instead (Quora → Settings → Email
+    settings; OpenAI/ChatGPT → Settings → Notifications).
+
 ## Sender preferences
 
 <!-- Format: - **sender/domain** — rule — (date added) -->
@@ -113,4 +143,14 @@ Notes for the next run on this mailbox:
   own UI (6,219 → 0 unread over a few iterations) and asked for an Excel
   export of the categorization, which was built and delivered, then
   revised twice on request (added plain-text URL column; date format
-  changed to ΗΗ-ΜΜ-ΕΕ).
+  changed to ΗΗ-ΜΜ-ΕΕ). Later the same day: found + listed all newsletter
+  sources mailbox-wide (not just 45d window) — dominated by
+  `newsletter@info.skroutz.gr` (~195/yr, near-daily); pulled real
+  unsubscribe links for Skroutz/Ferryhopper/Pinterest/Quora/OpenAI/Zapier
+  and hit a tool bug corrupting `=` in URLs (see "Known tool limitations")
+  — Pinterest link recovered and confirmed working, Quora/OpenAI
+  reconstruction attempts confirmed NOT working by the human. Also
+  discussed a marketing-spam cleanup (Temu/AliExpress/Adobe/etc. — no
+  bulk-delete tool available, same limitation as mark-as-read; proposed
+  bounded-window agent cleanup + human-driven Gmail filter for the rest),
+  not yet executed.
